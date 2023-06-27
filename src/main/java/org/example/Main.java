@@ -76,7 +76,7 @@ public class Main {
     }
 
     public static void FileIOImpl(String path, String str) throws SearchNotFileException {
-        try (FileWriter writer = new FileWriter("d:/sd.txt", true)) {
+        try (FileWriter writer = new FileWriter(path, true)) {
             writer.write(str);
             writer.append('\n');
             writer.flush();
