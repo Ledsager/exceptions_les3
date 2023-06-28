@@ -25,7 +25,6 @@
 
 package org.example;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -34,33 +33,15 @@ public class Main {
     public static void main(String[] args) {
         try {
             String str = getNullInUser();
-            String[] data = str.split(" ");
-            if (data.length != 6) {
-                throw new NullInUserException("Введено неверное количество данных.");
-            }
-
-            String lastName = data[0];
-            String firstName = data[1];
-            String patronymic = data[2];
-            String dateOfBirth = data[3];
-            String phoneNumber = data[4];
-            String gender = data[5];
-
-            validateData(lastName, firstName, patronymic, dateOfBirth, phoneNumber, gender);
-
-            String filename = lastName + ".txt";
-            String fileContent = lastName + " " + firstName + " " + patronymic +
-                    " " + dateOfBirth + " " + phoneNumber + " " + gender;
-
-            FileIOImpl(filename, fileContent);
-        } catch (SearchNotFileException | NullInUserException ex) {
-            System.out.println(ex.getMessage());
-//            ex.printStackTrace();
+            FileIOImpl("new.txt", str);
+        } catch (IOException ex){
+            System.err.println("Ошибка при записи в файл:");
+            ex.printStackTrace();
         }
 
     }
 
-    public static String getNullInUser() throws NullInUserException{
+    public static String getNullInUser() {
         Scanner scanner = new Scanner(System.in);
         String str = "";
 
@@ -69,64 +50,19 @@ public class Main {
         if (str.isEmpty()) try {
             throw new Exception();
         } catch (Exception e) {
-            throw new NullInUserException("пустые строки вводить нельзя!");
+            System.out.println("пустые строки вводить нельзя");
         }
         scanner.close();
         return str;
     }
 
-    public static void FileIOImpl(String path, String str) throws SearchNotFileException {
-        try (FileWriter writer = new FileWriter(path, true)) {
+    public static void FileIOImpl(String path, String str) throws IOException{
+        try
+            (FileWriter writer = new FileWriter(path, true)) {
             writer.write(str);
             writer.append('\n');
             writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new SearchNotFileException("Файл не найден ошибка");
         }
-    }
-
-    private static void validateData(String lastName, String firstName, String middleName, String dateOfBirth,
-                                     String phoneNumber, String gender) throws NullInUserException {
-        if (!isValidDate(dateOfBirth)) {
-            throw new NullInUserException("Неверный формат даты рождения(dd.mm.yyyy): " + dateOfBirth);
-        }
-
-        if (!isValidPhoneNumber(phoneNumber)) {
-            throw new NullInUserException("Неверный формат, номер телефона без знака(пример:89211525254): " + phoneNumber);
-        }
-
-        if (!isValidGender(gender)) {
-            throw new NullInUserException("Неверный формат, пол только 'f' или 'm': " + gender);
-        }
-    }
-
-    private static boolean isValidDate(String date) {
-        String regex = "^\\d{2}\\.\\d{2}\\.\\d{4}$";
-        return date.matches(regex);
-    }
-
-    private static boolean isValidPhoneNumber(String phoneNumber) {
-        try {
-            Long.parseLong(phoneNumber);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private static boolean isValidGender(String gender) {
-        return gender.equals("f") || gender.equals("m");
     }
 
 }
-class NullInUserException extends Exception {
-        public NullInUserException(String message) {
-            super(message);
-        }
-    }
-class SearchNotFileException extends IOException {
-        public SearchNotFileException(String message) {
-            super(message);
-        }
-    }
