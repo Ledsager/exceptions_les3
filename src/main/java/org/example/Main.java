@@ -55,7 +55,6 @@ public class Main {
             FileIOImpl(filename, fileContent);
         } catch (SearchNotFileException | NullInUserException ex) {
             System.out.println(ex.getMessage());
-//            ex.printStackTrace();
         }
 
     }
