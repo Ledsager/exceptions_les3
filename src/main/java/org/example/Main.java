@@ -55,7 +55,6 @@ public class Main {
             FileIOImpl(filename, fileContent);
         } catch (SearchNotFileException | NullInUserException ex) {
             System.out.println(ex.getMessage());
-//            ex.printStackTrace();
         }
 
     }
@@ -120,13 +119,14 @@ public class Main {
     }
 
 }
+
 class NullInUserException extends Exception {
-        public NullInUserException(String message) {
-            super(message);
-        }
+    public NullInUserException(String message) {
+        super(message);
     }
+}
 class SearchNotFileException extends IOException {
-        public SearchNotFileException(String message) {
-            super(message);
-        }
+    public SearchNotFileException(String message) {
+        super(message);
     }
+}
